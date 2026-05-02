@@ -13,6 +13,7 @@ services:
       database:
         condition: service_healthy
     env_file:
+      # arrega as variáveis globais da raiz (.env) (se houver alguma)
       - .env
     command: uvicorn app.main:app --host 0.0.0.0 --port 8000 --reload
     networks:
@@ -23,13 +24,13 @@ services:
     image: postgis/postgis:16-3.4-alpine
     container_name: postgis_db
     environment:
-      - POSTGRES_USER=${DB_USER:-dev}
-      - POSTGRES_PASSWORD=${DB_PASSWORD:-dev123}
-      - POSTGRES_DB=${DB_NAME:-pousada_db}
+      - POSTGRES_USER=${DB_USER:-postgres}
+      - POSTGRES_PASSWORD=${DB_PASSWORD:-template}
+      - POSTGRES_DB=${DB_NAME:-template}
     volumes:
       - postgres_data:/var/lib/postgresql/data
     healthcheck:
-      test: ['CMD-SHELL', 'pg_isready -U ${DB_USER:-dev} -d ${DB_NAME:-pousada_db}']
+      test: ['CMD-SHELL', 'pg_isready -U ${DB_USER:-postgres} -d ${DB_NAME:-template}']
       interval: 5s
       timeout: 5s
       retries: 5

@@ -11,6 +11,9 @@ export default defineConfig({
     // e o Hot Reload funcione corretamente via http://localhost:5173
     host: '0.0.0.0',
     port: 5173,
+    watch: {
+      usePolling: true, // Necessário para Hot Reload no WSL2/Docker
+    },
   },
   // --- CONFIGURAÇÃO DO ALIAS @ ---
   resolve: {
