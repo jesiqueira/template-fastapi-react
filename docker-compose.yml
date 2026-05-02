@@ -53,7 +53,26 @@ services:
 
   # --- FRONTEND: VITE/REACT ---
   frontend:
-    # ... manter sua configuração atual ...
+    build:
+      context: ./frontend      # Aponta para a pasta do frontend
+      dockerfile: Dockerfile.dev
+    container_name: vite_frontend
+    ports:
+      - "5173:5173" # Mapeamento para acesso via localhost:5173
+    volumes:
+      # Mapeamento do código para Hot Reload (HMR)
+      - ./frontend:/app
+      - /app/node_modules       
+    env_file:
+      # 1. Carrega as variáveis do frontend/.env (públicas)
+      - ./frontend/.env
+    environment:
+      # Sobrescreve a URL da API para usar o endereço interno do Docker (http://<nome_do_serviço>:<porta_interna>)
+      # - VITE_API_URL=http://app:3000/api
+      # Sobrescreve para garantir que o navegador aponte para a porta certa do Host
+      - VITE_API_URL=http://localhost:8000/api/v1
+    depends_on:
+      - app
     networks:
       - app-network
 
