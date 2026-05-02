@@ -1,0 +1,28 @@
+# --- Qualidade de Código (Lint & Format) ---
+black==24.4.2
+flake8==7.0.0
+
+# --- Web Framework ---
+fastapi==0.111.0
+uvicorn[standard]==0.30.1
+
+# --- Database & Migrations ---
+# SQLAlchemy com suporte a chamadas assíncronas para melhor performance
+sqlalchemy==2.0.30
+alembic==1.13.1
+# Driver do PostgreSQL (versão binary para facilitar instalação no Alpine)
+psycopg2-binary==2.9.9
+# Extensão para lidar com tipos Geográficos (PostGIS)
+geoalchemy2==0.15.0
+
+# --- Security & Validation ---
+# Pydantic para validação estrita de dados (Segurança de entrada)
+pydantic==2.7.1
+pydantic-settings==2.2.1
+# Segurança: Hash de senhas e Tokens JWT
+passlib[bcrypt]==1.7.4
+python-jose[cryptography]==3.3.0
+python-multipart==0.0.9
+
+# --- Utilities ---
+python-dotenv==1.0.1

@@ -1,0 +1,34 @@
+# --- AMBIENTE E SEGURANÇA ---
+.env
+.env.local
+.env.*.local
+*.log
+.vscode/
+.idea/
+
+# --- BACKEND (Python/FastAPI) ---
+__pycache__/
+*.py[cod]
+*$py.class
+.pytest_cache/
+.venv
+venv/
+ENV/
+build/
+dist/
+*.egg-info/
+.mypy_cache/
+
+# --- FRONTEND (Node/React/Vite) ---
+node_modules/
+/frontend/dist
+/frontend/build
+.eslintcache
+.stylelintcache
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+
+# --- DOCKER & DB ---
+.docker/
+postgres_data/

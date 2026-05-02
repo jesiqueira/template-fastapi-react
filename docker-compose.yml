@@ -1,0 +1,65 @@
+services:
+  # --- BACKEND: FASTAPI ---
+  app:
+    build:
+      context: ./backend
+      dockerfile: Dockerfile
+    container_name: fastapi_app
+    ports:
+      - '8000:8000'
+    volumes:
+      - ./backend:/app
+    depends_on:
+      database:
+        condition: service_healthy
+    env_file:
+      - .env
+    command: uvicorn app.main:app --host 0.0.0.0 --port 8000 --reload
+    networks:
+      - app-network
+
+  # --- DATABASE: POSTGIS (Essencial para seu projeto) ---
+  database:
+    image: postgis/postgis:16-3.4-alpine
+    container_name: postgis_db
+    environment:
+      - POSTGRES_USER=${DB_USER:-dev}
+      - POSTGRES_PASSWORD=${DB_PASSWORD:-dev123}
+      - POSTGRES_DB=${DB_NAME:-pousada_db}
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    healthcheck:
+      test: ['CMD-SHELL', 'pg_isready -U ${DB_USER:-dev} -d ${DB_NAME:-pousada_db}']
+      interval: 5s
+      timeout: 5s
+      retries: 5
+    networks:
+      - app-network
+
+  # --- PGADMIN (Pode manter, é ótimo para DBA) ---
+  pgadmin:
+    image: dpage/pgadmin4
+    container_name: pgadmin
+    environment:
+      - PGADMIN_DEFAULT_EMAIL=${PGADMIN_EMAIL:-admin@admin.com}
+      - PGADMIN_DEFAULT_PASSWORD=${PGADMIN_PASSWORD:-admin123}
+    ports:
+      - '8080:80'
+    depends_on:
+      database:
+        condition: service_healthy # Garante que o pgAdmin só tente conectar quando o banco subir
+    networks:
+      - app-network
+
+  # --- FRONTEND: VITE/REACT ---
+  frontend:
+    # ... manter sua configuração atual ...
+    networks:
+      - app-network
+
+networks:
+  app-network:
+    driver: bridge
+
+volumes:
+  postgres_data:
